@@ -3,7 +3,7 @@ module Typed exposing
     , ReadOnly, ReadWrite
     , new
     , value, map, andThen
-    , encode, decode
+    , encode, decode, encodeStrict, decodeStrict
     )
 
 {-|
@@ -31,7 +31,7 @@ module Typed exposing
 
 # Serialization
 
-@docs encode, decode
+@docs encode, decode, encodeStrict, decodeStrict
 
 -}
 
@@ -118,3 +118,17 @@ encode encoder (Typed value_) =
 decode : Decoder a -> Decoder (Typed tag a p)
 decode decoder =
     Json.Decode.map Typed decoder
+
+
+{-| Stricter version of `encode` that accepts a tag to check.
+-}
+encodeStrict : tag -> (a -> Value) -> Typed tag a p -> Value
+encodeStrict _ =
+    encode
+
+
+{-| Stricter version of `decode` that accepts a tag to check.
+-}
+decodeStrict : tag -> Decoder a -> Decoder (Typed tag a p)
+decodeStrict _ =
+    decode
