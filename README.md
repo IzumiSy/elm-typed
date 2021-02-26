@@ -19,10 +19,8 @@ This empowers users to achieve additional type-safety that helps distinct data t
 ### Exceptions
 Only exceptions of permission are `decode` and `encode`. They are available both in `ReadOnly` and `ReadWrite`.
 
-This is because those functions playing a role like a deserializer/serializer mainly commnunicates only with data coming from outside of your Elm application.
-Permission concerns data modifiability **only within life-cycle of your Elm application**.
-There is no way to operate data typed as `Value` in Elm application, so I can say `ReadOnly` permission is doing a good job.
-
+This is because those functions playing a role like a deserializer/serializer mainly commnunicates only with data coming from outside of your Elm application as `Value` type, but permission concerns data modifiability **only within life-cycle of your Elm application**.
+There is no way to operate data typed as `Value` in Elm, so I can say `ReadOnly` permission is doing a good job.
 
 ## Example
 
