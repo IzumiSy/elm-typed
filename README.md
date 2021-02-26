@@ -4,10 +4,27 @@
 
 This, elm-typed, is a package that helps developers to achieve additional type-safety without opaque modules.
 
-## Example
-Fundamental concept is the same as the packages mentioned at "Prior art" section of this document have.
+### Features
+Fundamental concept is the same as the packages mentioned at "Prior art" section of this document have, but the core feature elm-typed offers users in addition is **permission**. 
 
-The core feature this package offers in addition is permission. Users can control modifiability on the type defition.
+Permission is a feature that can controls data modifiability, which internally employs phatom types to change available functions statically.
+
+| Permission | Available functions      |
+| ---------- | ------------------------ |
+| ReadOnly   | value                    |
+| ReadWrite  | value, map, andThen, new |
+
+This empowers users to achieve additional type-safety that helps distinct data types with its life-cycle in Elm application.
+
+### Exceptions
+Only exceptions of permission are `decode` and `encode`. They are available both in `ReadOnly` and `ReadWrite`.
+
+This is because those functions playing a role like a deserializer/serializer mainly commnunicates only with data coming from outside of your Elm application.
+Permission concerns data modifiability **only within life-cycle of your Elm application**.
+There is no way to operate data typed as `Value` in Elm application, so I can say `ReadOnly` permission is doing a good job.
+
+
+## Example
 
 ```elm
 import Typed exposing (Typed, ReadOnly, ReadWrite)
