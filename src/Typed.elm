@@ -1,7 +1,7 @@
 module Typed exposing
     ( Typed
-    , ReadOnly, ReadWrite
-    , new
+    , ReadOnly, ReadWrite, Inunwrappable
+    , new, inunwrappable
     , value, map, andThen
     , encode, decode, encodeStrict, decodeStrict
     )
@@ -16,12 +16,12 @@ module Typed exposing
 
 # Permissions
 
-@docs ReadOnly, ReadWrite
+@docs ReadOnly, ReadWrite, Inunwrappable
 
 
 # Constructor
 
-@docs new
+@docs new, inunwrappable
 
 
 # Manipulation
@@ -52,20 +52,53 @@ type Typed tag a p
     = Typed a
 
 
+type Allowed
+    = Allowed
+
+
+type Unallowed
+    = Unallowed
+
+
+type alias Unwrappable_ p =
+    { p | unwrap : Allowed }
+
+
+type alias Inunwrappable_ p =
+    { p | unwrap : Unallowed }
+
+
+type alias Writable_ p =
+    { p | write : Allowed }
+
+
 
 -- Permissions
 
 
 {-| ReadWrite permission allows users to call all functions.
 -}
-type ReadWrite
-    = ReadWrite
+type alias ReadWrite =
+    { read : Allowed
+    , write : Allowed
+    , unwrap : Allowed
+    }
 
 
 {-| ReadOnly permission prohibits users to call all functions that do constructing and updating such as `new`, `map` and `andThen`.
 -}
-type ReadOnly
-    = ReadOnly
+type alias ReadOnly =
+    { read : Allowed
+    , unwrap : Allowed
+    }
+
+
+{-| Inunwrappable permission prohibits users to call `value` function to get internal implementation.
+-}
+type alias Inunwrappable =
+    { read : Allowed
+    , write : Allowed
+    }
 
 
 
@@ -73,8 +106,14 @@ type ReadOnly
 
 
 {-| -}
-new : a -> Typed tag a ReadWrite
+new : a -> Typed tag a (Writable_ p)
 new =
+    Typed
+
+
+{-| -}
+inunwrappable : a -> Typed tag a (Inunwrappable_ p)
+inunwrappable =
     Typed
 
 
@@ -83,19 +122,19 @@ new =
 
 
 {-| -}
-value : Typed tag a p -> a
+value : Typed tag a (Unwrappable_ p) -> a
 value (Typed value_) =
     value_
 
 
 {-| -}
-map : (a -> a) -> Typed tag a ReadWrite -> Typed tag a ReadWrite
+map : (a -> a) -> Typed tag a (Writable_ p) -> Typed tag a (Writable_ p)
 map f (Typed value_) =
     Typed <| f value_
 
 
 {-| -}
-andThen : (a -> Typed tag b ReadWrite) -> Typed tag a ReadWrite -> Typed tag b ReadWrite
+andThen : (a -> Typed tag b (Writable_ p)) -> Typed tag a (Writable_ p) -> Typed tag b (Writable_ p)
 andThen f (Typed value_) =
     f value_
 
