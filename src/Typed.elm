@@ -68,10 +68,6 @@ type alias Inunwrappable_ p =
     { p | unwrap : Unallowed }
 
 
-type alias Writable_ p =
-    { p | write : Allowed }
-
-
 
 -- Permissions
 
@@ -106,7 +102,7 @@ type alias Inunwrappable =
 
 
 {-| -}
-new : a -> Typed tag a (Writable_ p)
+new : a -> Typed tag a ReadWrite
 new =
     Typed
 
@@ -128,13 +124,13 @@ value (Typed value_) =
 
 
 {-| -}
-map : (a -> a) -> Typed tag a (Writable_ p) -> Typed tag a (Writable_ p)
+map : (a -> a) -> Typed tag a ReadWrite -> Typed tag a ReadWrite
 map f (Typed value_) =
     Typed <| f value_
 
 
 {-| -}
-andThen : (a -> Typed tag b (Writable_ p)) -> Typed tag a (Writable_ p) -> Typed tag b (Writable_ p)
+andThen : (a -> Typed tag b ReadWrite) -> Typed tag a ReadWrite -> Typed tag b ReadWrite
 andThen f (Typed value_) =
     f value_
 
