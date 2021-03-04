@@ -3,7 +3,7 @@
     "name": "IzumiSy/elm-typed",
     "summary": "Type-safe way aliasing your primitive types easily",
     "license": "MIT",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "exposed-modules": [
         "Typed"
     ],
