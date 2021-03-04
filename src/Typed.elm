@@ -1,6 +1,6 @@
 module Typed exposing
     ( Typed
-    , ReadOnly, ReadWrite, Inunwrappable
+    , ReadOnly, ReadWrite, WriteOnly
     , new, inunwrappable
     , value, map, andThen
     , encode, decode, encodeStrict, decodeStrict
@@ -16,7 +16,7 @@ module Typed exposing
 
 # Permissions
 
-@docs ReadOnly, ReadWrite, Inunwrappable
+@docs ReadOnly, ReadWrite, WriteOnly
 
 
 # Constructor
@@ -60,12 +60,12 @@ type Unallowed
     = Unallowed
 
 
-type alias Unwrappable_ p =
-    { p | unwrap : Allowed }
+type alias Readable p =
+    { p | read : Allowed }
 
 
-type alias Inunwrappable_ p =
-    { p | unwrap : Unallowed }
+type alias Writable p =
+    { p | write : Allowed }
 
 
 
@@ -85,14 +85,14 @@ type alias ReadWrite =
 -}
 type alias ReadOnly =
     { read : Allowed
-    , unwrap : Allowed
+    , write : Unallowed
     }
 
 
 {-| Inunwrappable permission prohibits users to call `value` function to get internal implementation.
 -}
-type alias Inunwrappable =
-    { read : Allowed
+type alias WriteOnly =
+    { read : Unallowed
     , write : Allowed
     }
 
@@ -108,7 +108,7 @@ new =
 
 
 {-| -}
-inunwrappable : a -> Typed tag a (Inunwrappable_ p)
+inunwrappable : a -> Typed tag a WriteOnly
 inunwrappable =
     Typed
 
@@ -118,19 +118,19 @@ inunwrappable =
 
 
 {-| -}
-value : Typed tag a (Unwrappable_ p) -> a
+value : Typed tag a (Readable p) -> a
 value (Typed value_) =
     value_
 
 
 {-| -}
-map : (a -> a) -> Typed tag a ReadWrite -> Typed tag a ReadWrite
+map : (a -> a) -> Typed tag a (Writable p) -> Typed tag a (Writable p)
 map f (Typed value_) =
     Typed <| f value_
 
 
 {-| -}
-andThen : (a -> Typed tag b ReadWrite) -> Typed tag a ReadWrite -> Typed tag b ReadWrite
+andThen : (a -> Typed tag b (Writable p)) -> Typed tag a (Writable p) -> Typed tag b (Writable p)
 andThen f (Typed value_) =
     f value_
 
