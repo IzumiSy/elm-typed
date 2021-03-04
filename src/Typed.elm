@@ -1,7 +1,7 @@
 module Typed exposing
     ( Typed
     , ReadOnly, ReadWrite, WriteOnly
-    , new, inunwrappable
+    , new, writeOnly
     , value, map, andThen
     , encode, decode, encodeStrict, decodeStrict
     )
@@ -21,7 +21,7 @@ module Typed exposing
 
 # Constructor
 
-@docs new, inunwrappable
+@docs new, writeOnly
 
 
 # Manipulation
@@ -77,7 +77,6 @@ type alias Writable p =
 type alias ReadWrite =
     { read : Allowed
     , write : Allowed
-    , unwrap : Allowed
     }
 
 
@@ -89,7 +88,7 @@ type alias ReadOnly =
     }
 
 
-{-| Inunwrappable permission prohibits users to call `value` function to get internal implementation.
+{-| WriteOnly permission prohibits users to call `value` function to get internal implementation.
 -}
 type alias WriteOnly =
     { read : Unallowed
@@ -108,8 +107,8 @@ new =
 
 
 {-| -}
-inunwrappable : a -> Typed tag a WriteOnly
-inunwrappable =
+writeOnly : a -> Typed tag a WriteOnly
+writeOnly =
     Typed
 
 
