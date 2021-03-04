@@ -7,13 +7,13 @@ This, elm-typed, is a package that helps developers to achieve additional type-s
 ### Features
 Fundamental concept is the same as the packages mentioned at "Prior art" section of this document have, but the core feature elm-typed offers users in addition is **permission**. 
 
-Permission is a feature that can controls data modifiability, which internally employs phatom types to change available functions statically.
+Permission is a feature that can statically controls data modifiability or accessibility, which internally employs phatom types to decide functions available for users.
 
-| Permission | Available functions      |
-| ---------- | ------------------------ |
-| ReadOnly   | value                    |
-| ReadWrite  | value, map, andThen, new |
-| WriteOnly  | map, andThen, new        |
+| Permission  | Available functions      |
+| ----------- | ------------------------ |
+| `ReadOnly`  | value                    |
+| `ReadWrite` | value, map, andThen, new |
+| `WriteOnly` | map, andThen, new        |
 
 This empowers users to achieve additional type-safety that helps distinct data types with its life-cycle in Elm application.
 
