@@ -13,11 +13,12 @@ Permission is a feature that can controls data modifiability, which internally e
 | ---------- | ------------------------ |
 | ReadOnly   | value                    |
 | ReadWrite  | value, map, andThen, new |
+| WriteOnly  | map, andThen, new        |
 
 This empowers users to achieve additional type-safety that helps distinct data types with its life-cycle in Elm application.
 
 ### Exceptions
-Only exceptions of permission are `decode` and `encode`. They are available both in `ReadOnly` and `ReadWrite`.
+Only exceptions of permission are `decode` and `encode`. They are available in all permissions.
 
 This is because those functions playing a role like a deserializer/serializer mainly commnunicates only with data coming from outside of your Elm application as `Value` type, but permission concerns data modifiability **only within life-cycle of your Elm application**.
 There is no way to operate data typed as `Value` in Elm, so I can say `ReadOnly` permission is doing a good job.
