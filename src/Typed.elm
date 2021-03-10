@@ -1,6 +1,7 @@
 module Typed exposing
     ( Typed
     , ReadOnly, ReadWrite, WriteOnly
+    , Readable, Writable
     , new, writeOnly
     , value, map, andThen
     , encode, decode, encodeStrict, decodeStrict
@@ -17,6 +18,11 @@ module Typed exposing
 # Permissions
 
 @docs ReadOnly, ReadWrite, WriteOnly
+
+
+# Policies
+
+@docs Readable, Writable
 
 
 # Constructor
@@ -60,14 +66,6 @@ type Unallowed
     = Unallowed
 
 
-type alias Readable p =
-    { p | read : Allowed }
-
-
-type alias Writable p =
-    { p | write : Allowed }
-
-
 
 -- Permissions
 
@@ -94,6 +92,22 @@ type alias WriteOnly =
     { read : Unallowed
     , write : Allowed
     }
+
+
+
+-- Policies
+
+
+{-| Policy for allowing `read` permission.
+-}
+type alias Readable p =
+    { p | read : Allowed }
+
+
+{-| Policy for allowing `write` permission.
+-}
+type alias Writable p =
+    { p | write : Allowed }
 
 
 
