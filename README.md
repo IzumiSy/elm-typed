@@ -52,7 +52,7 @@ In the example, `memberId` cannot be reassign anymore because it is marked as `R
 ```elm
 newMemberId : MemberId
 newMemberId =
-    Typed.new "1" -- compile error!
+    Typed.new 1 -- compile error!
 
 newAge : Age
 newAge =
